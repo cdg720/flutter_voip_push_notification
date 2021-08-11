@@ -24,13 +24,13 @@ class NotificationSettings {
         alert = settings['alert'],
         badge = settings['badge'];
 
-  final bool sound;
-  final bool alert;
-  final bool badge;
+  final bool? sound;
+  final bool? alert;
+  final bool? badge;
 
   @visibleForTesting
   Map<String, dynamic> toMap() {
-    return <String, bool>{'sound': sound, 'alert': alert, 'badge': badge};
+    return <String, bool?>{'sound': sound, 'alert': alert, 'badge': badge};
   }
 
   @override
@@ -48,19 +48,19 @@ class LocalNotification {
         assert(alertAction != null);
 
   /// The message displayed in the notification alert.
-  final String alertBody;
+  final String? alertBody;
 
   /// The [action] displayed beneath an actionable notification. Defaults to "view";
-  final String alertAction;
+  final String? alertAction;
 
   /// The sound played when the notification is fired (optional).
-  final String soundName;
+  final String? soundName;
 
   /// The category of this notification, required for actionable notifications (optional).
-  final String category;
+  final String? category;
 
   /// An optional object containing additional notification data.
-  final Map<String, dynamic> userInfo;
+  final Map<String, dynamic>? userInfo;
 
   @visibleForTesting
   Map<String, dynamic> toMap() {
@@ -89,23 +89,23 @@ class FlutterVoipPushNotification {
           const MethodChannel('com.peerwaya/flutter_voip_push_notification'));
 
   final MethodChannel _channel;
-  String _token;
-  MessageHandler _onMessage;
-  MessageHandler _onResume;
+  String? _token;
+  MessageHandler? _onMessage;
+  MessageHandler? _onResume;
 
 
-  final StreamController<String> _tokenStreamController =
-      StreamController<String>.broadcast();
+  final StreamController<String?> _tokenStreamController =
+      StreamController<String?>.broadcast();
 
   /// Fires when a new device token is generated.
-  Stream<String> get onTokenRefresh {
+  Stream<String?> get onTokenRefresh {
     return _tokenStreamController.stream;
   }
 
   /// Sets up [MessageHandler] for incoming messages.
   void configure({
-    MessageHandler onMessage,
-    MessageHandler onResume,
+    MessageHandler? onMessage,
+    MessageHandler? onResume,
   }) {
     _onMessage = onMessage;
     _onResume = onResume;
@@ -121,10 +121,10 @@ class FlutterVoipPushNotification {
         _tokenStreamController.add(_token);
         return null;
       case "onMessage":
-        return _onMessage(
+        return _onMessage!(
             map["local"], map["notification"].cast<String, dynamic>());
       case "onResume":
-        return _onResume(
+        return _onResume!(
             map["local"], map["notification"].cast<String, dynamic>());
       default:
         throw UnsupportedError("Unrecognized JSON message");
@@ -132,7 +132,7 @@ class FlutterVoipPushNotification {
   }
 
   /// Returns the locally cached push token
-  Future<String> getToken() async {
+  Future<String?> getToken() async {
     return await _channel.invokeMethod<String>('getToken');
   }
 

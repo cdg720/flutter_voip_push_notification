@@ -10,7 +10,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _pushToken = '';
+  String? _pushToken;
   FlutterVoipPushNotification _voipPush = FlutterVoipPushNotification();
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   /// Called when the device token changes
-  void onToken(String token) {
+  void onToken(String? token) {
     // send token to your apn provider server
     setState(() {
       _pushToken = token;
@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
   ///
   /// [isLocal] is true if its a local notification or false otherwise (remote notification)
   /// [payload] the notification payload to be processed. use this to present a local notification
-  Future<dynamic> onMessage(bool isLocal, Map<String, dynamic> payload) {
+  Future<dynamic> onMessage(bool isLocal, Map<String, dynamic> payload) async {
     // handle foreground notification
     print("received on foreground payload: $payload, isLocal=$isLocal");
     return null;
@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
   ///
   /// [isLocal] is true if its a local notification or false otherwise (remote notification)
   /// [payload] the notification payload to be processed. use this to present a local notification
-  Future<dynamic> onResume(bool isLocal, Map<String, dynamic> payload) {
+  Future<dynamic> onResume(bool isLocal, Map<String, dynamic> payload) async {
     // handle background notification
     print("received on background payload: $payload, isLocal=$isLocal");
     showLocalNotification(payload);
