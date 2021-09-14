@@ -8,7 +8,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class FlutterVoipPushNotificationPlugin: MethodCallHandler {
+class FlutterVoipPushNotificationPlugin: FlutterPlugin, MethodCallHandler {
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -28,5 +28,8 @@ class FlutterVoipPushNotificationPlugin: MethodCallHandler {
     } else {
       result.notImplemented()
     }
+  }
+
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
   }
 }
